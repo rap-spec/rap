@@ -1,0 +1,460 @@
+{
+  "spec": "RAP Payment Intent v1",
+  "generated": "2026-10-04",
+  "positive": [
+    {
+      "id": "P1",
+      "name": "Required fields only",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:c294ecbe6b971673a06cd7dba2b2da12b61d51b3b5a9def685d8783b190831c6"
+    },
+    {
+      "id": "P2",
+      "name": "Payee in mixed case; normalizes to P1",
+      "input": {
+        "v": "1",
+        "payee": "0x8AC5381FCD9E7395D14E02986C344AADA84B4BC6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:c294ecbe6b971673a06cd7dba2b2da12b61d51b3b5a9def685d8783b190831c6"
+    },
+    {
+      "id": "P3",
+      "name": "Same fields, different key order; same digest as P1",
+      "input": {
+        "network": "eip155:8453",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "amount_atomic": "850000",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "v": "1"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:c294ecbe6b971673a06cd7dba2b2da12b61d51b3b5a9def685d8783b190831c6"
+    },
+    {
+      "id": "P4",
+      "name": "Amount changed by 1 atomic unit",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850001",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850001",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453"
+      },
+      "jcs": "{\"amount_atomic\":\"850001\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:d4acb892243d1dfc8408b468c2bc122c8259dce87886a8aeba0a2efa68856bee"
+    },
+    {
+      "id": "P5",
+      "name": "Coherent network-and-asset change: both moved to Base Sepolia USDC. A network-only change that conflicts with asset_id is rejected before any digest (see N3), so it has no digest of its own",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:84532/erc20:0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+        "network": "eip155:84532"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:84532/erc20:0x036cbd53842c5426634e7929541ec2318f3dcf7e",
+        "network": "eip155:84532"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:84532/erc20:0x036cbd53842c5426634e7929541ec2318f3dcf7e\",\"network\":\"eip155:84532\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:febce9dfcbab486d4a85b7707941b9cff6b002ffc81cf2368a22010a68aee29f"
+    },
+    {
+      "id": "P6",
+      "name": "Asset changed to bridged USDbC on Base",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+        "network": "eip155:8453"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca",
+        "network": "eip155:8453"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0xd9aaec86b65d86f6a7b5b1b0c42ffa531710b6ca\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:edcab2b003aab269d81223e7210adc155ecce2cba203d914be4d83c468262b2d"
+    },
+    {
+      "id": "P7",
+      "name": "With four optional refs",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453",
+        "request_ref": "ak_req_01J9ZX",
+        "payer_address": "0x1111111111111111111111111111111111111111",
+        "principal_ref": "ak_agent_42",
+        "mandate_ref": "ak_policy_7"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453",
+        "request_ref": "ak_req_01J9ZX",
+        "payer_address": "0x1111111111111111111111111111111111111111",
+        "principal_ref": "ak_agent_42",
+        "mandate_ref": "ak_policy_7"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"mandate_ref\":\"ak_policy_7\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"payer_address\":\"0x1111111111111111111111111111111111111111\",\"principal_ref\":\"ak_agent_42\",\"request_ref\":\"ak_req_01J9ZX\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:aa7c82b786fcac59d8f05b5b716bb89a0f3e4bd5800967fee61e2b7253c7ee67"
+    },
+    {
+      "id": "P8",
+      "name": "resource_ref with non-ASCII text and a query string; opaque, not normalized",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453",
+        "resource_ref": "https://seller.example/api/données?b=2&a=1"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453",
+        "resource_ref": "https://seller.example/api/données?b=2&a=1"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"resource_ref\":\"https://seller.example/api/données?b=2&a=1\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:bd90bfbe49d392b5fab116aced6d923a4f40acf7f7cce39c3ed7da2be06801e5"
+    },
+    {
+      "id": "P9",
+      "name": "Same visible resource_ref as P8 but with a decomposed é (e + U+0301); JCS does not normalize Unicode, so the digest differs",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453",
+        "resource_ref": "https://seller.example/api/données?b=2&a=1"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453",
+        "resource_ref": "https://seller.example/api/données?b=2&a=1"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"resource_ref\":\"https://seller.example/api/données?b=2&a=1\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:1ac72a7e1aa0b1cf756bfa2ba1fe9559bb8e5305e9a082e460235345795162c1"
+    },
+    {
+      "id": "P10",
+      "name": "Same as P7 but a different payer_address: the bound payer identity changed, so the digest differs",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453",
+        "request_ref": "ak_req_01J9ZX",
+        "payer_address": "0x2222222222222222222222222222222222222222",
+        "principal_ref": "ak_agent_42",
+        "mandate_ref": "ak_policy_7"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453",
+        "request_ref": "ak_req_01J9ZX",
+        "payer_address": "0x2222222222222222222222222222222222222222",
+        "principal_ref": "ak_agent_42",
+        "mandate_ref": "ak_policy_7"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"mandate_ref\":\"ak_policy_7\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"payer_address\":\"0x2222222222222222222222222222222222222222\",\"principal_ref\":\"ak_agent_42\",\"request_ref\":\"ak_req_01J9ZX\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:9c3655fb84f65951135bb39f66bd7a7c82f089d0a5cc9bfa8c2e84d30524f61b"
+    },
+    {
+      "id": "P11",
+      "name": "Payee changed: P1 with a different payee, so the digest differs",
+      "input": {
+        "v": "1",
+        "payee": "0x1111111111111111111111111111111111111111",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x1111111111111111111111111111111111111111",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"network\":\"eip155:8453\",\"payee\":\"0x1111111111111111111111111111111111111111\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:6294662bf263afab4a69c8d06f9966ae003002f21eeb6ed634f1a4e1a2102a25"
+    },
+    {
+      "id": "P12",
+      "name": "principal_ref changed: P7 with a different principal_ref, so the digest differs",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453",
+        "request_ref": "ak_req_01J9ZX",
+        "payer_address": "0x1111111111111111111111111111111111111111",
+        "principal_ref": "ak_agent_43",
+        "mandate_ref": "ak_policy_7"
+      },
+      "normalized": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+        "network": "eip155:8453",
+        "request_ref": "ak_req_01J9ZX",
+        "payer_address": "0x1111111111111111111111111111111111111111",
+        "principal_ref": "ak_agent_43",
+        "mandate_ref": "ak_policy_7"
+      },
+      "jcs": "{\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913\",\"mandate_ref\":\"ak_policy_7\",\"network\":\"eip155:8453\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"payer_address\":\"0x1111111111111111111111111111111111111111\",\"principal_ref\":\"ak_agent_43\",\"request_ref\":\"ak_req_01J9ZX\",\"v\":\"1\"}",
+      "payment_intent_digest": "sha256:f8526c1956847e913c4c04069487141ae87acb183474d2378de078b3ebca308e"
+    }
+  ],
+  "negative": [
+    {
+      "id": "N1",
+      "name": "Decimal amount",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "0.85",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453"
+      },
+      "expected_error": "invalid_amount_atomic"
+    },
+    {
+      "id": "N2",
+      "name": "Amount with a leading zero",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "0850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453"
+      },
+      "expected_error": "invalid_amount_atomic"
+    },
+    {
+      "id": "N3",
+      "name": "asset_id chain differs from network",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:84532"
+      },
+      "expected_error": "asset_network_mismatch"
+    },
+    {
+      "id": "N4",
+      "name": "payee absent",
+      "input": {
+        "v": "1",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453"
+      },
+      "expected_error": "missing_required:payee"
+    },
+    {
+      "id": "N5",
+      "name": "Optional field provided as an empty string",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453",
+        "request_ref": ""
+      },
+      "expected_error": "empty_value:request_ref"
+    },
+    {
+      "id": "N6",
+      "name": "Amount sent as a JSON number",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": 850000,
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453"
+      },
+      "expected_error": "non_string_value:amount_atomic"
+    },
+    {
+      "id": "N7",
+      "name": "Unknown field",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453",
+        "memo": "x"
+      },
+      "expected_error": "unknown_field:memo"
+    },
+    {
+      "id": "N8",
+      "name": "Raw JSON text with the payee member twice (rejected before parsing into an object)",
+      "input": {
+        "raw": "{\"v\":\"1\",\"payee\":\"0x8ac5381fcd9e7395d14e02986c344aada84b4bc6\",\"payee\":\"0x1111111111111111111111111111111111111111\",\"amount_atomic\":\"850000\",\"asset_id\":\"eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913\",\"network\":\"eip155:8453\"}"
+      },
+      "expected_error": "duplicate_member:payee"
+    },
+    {
+      "id": "N9",
+      "name": "payee on eip155 is not a 20-byte hex address",
+      "input": {
+        "v": "1",
+        "payee": "0x1234",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453"
+      },
+      "expected_error": "invalid_address:payee"
+    },
+    {
+      "id": "N10",
+      "name": "payer_address on eip155 is not a 20-byte hex address",
+      "input": {
+        "v": "1",
+        "payee": "0x8ac5381fcd9e7395d14e02986c344aada84b4bc6",
+        "amount_atomic": "850000",
+        "asset_id": "eip155:8453/erc20:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "network": "eip155:8453",
+        "payer_address": "0xZZ5381fcd9e7395d14e02986c344aada84b4bc6"
+      },
+      "expected_error": "invalid_address:payer_address"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "name": "Three items in any input order produce one digest (anchor values are illustrative)",
+      "items": [
+        {
+          "type": "list_membership",
+          "subject_ref": "payee",
+          "source": "ofac-sdn",
+          "status": "not_listed",
+          "anchor": {
+            "published": "2026-10-02",
+            "sha256": "0367408834e4"
+          }
+        },
+        {
+          "type": "issuer_freeze",
+          "subject_ref": "payee",
+          "source": "usdc-issuer-blacklist",
+          "status": "not_frozen",
+          "anchor": {
+            "chain": "eip155:8453",
+            "block": "21000000"
+          }
+        },
+        {
+          "type": "list_membership",
+          "subject_ref": "payee",
+          "source": "oceanalt-list:scam",
+          "status": "not_listed",
+          "anchor": {
+            "read_at": "2026-10-02"
+          }
+        }
+      ],
+      "jcs": "{\"items\":[{\"anchor\":{\"block\":\"21000000\",\"chain\":\"eip155:8453\"},\"source\":\"usdc-issuer-blacklist\",\"status\":\"not_frozen\",\"subject_ref\":\"payee\",\"type\":\"issuer_freeze\"},{\"anchor\":{\"published\":\"2026-10-02\",\"sha256\":\"0367408834e4\"},\"source\":\"ofac-sdn\",\"status\":\"not_listed\",\"subject_ref\":\"payee\",\"type\":\"list_membership\"},{\"anchor\":{\"read_at\":\"2026-10-02\"},\"source\":\"oceanalt-list:scam\",\"status\":\"not_listed\",\"subject_ref\":\"payee\",\"type\":\"list_membership\"}],\"v\":\"1\"}",
+      "evidence_set_digest": "sha256:f2586adceb5ae0f7085f2bac307cf222f61ddeef58c5b929e14f26524ef3d6c6"
+    },
+    {
+      "id": "EN1",
+      "name": "Exact duplicate item",
+      "items": [
+        {
+          "type": "list_membership",
+          "subject_ref": "payee",
+          "source": "ofac-sdn",
+          "status": "not_listed",
+          "anchor": {
+            "published": "2026-10-02",
+            "sha256": "0367408834e4"
+          }
+        },
+        {
+          "type": "list_membership",
+          "subject_ref": "payee",
+          "source": "ofac-sdn",
+          "status": "not_listed",
+          "anchor": {
+            "published": "2026-10-02",
+            "sha256": "0367408834e4"
+          }
+        }
+      ],
+      "expected_error": "evidence_duplicate_item"
+    }
+  ]
+}
