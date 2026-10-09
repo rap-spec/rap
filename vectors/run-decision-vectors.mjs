@@ -18,6 +18,7 @@ for (const v of V.vectors) {
     if (e.signal_class && j.signal_class !== e.signal_class) fails.push(`class ${j.signal_class}`);
     if (e.signal_keys_contain && !(j.signal_keys || []).includes(e.signal_keys_contain)) fails.push(`keys ${j.signal_keys}`);
     if (e.evidence_nonempty && !(j.evidence || []).length) fails.push("no evidence");
+    if (e.evidence_set_valid) { const it = j.evidence_set?.items; if (!Array.isArray(it) || !it.length || !it.every((x) => ["type", "subject_ref", "source", "status", "anchor"].every((k) => k in x))) fails.push("evidence_set invalid"); }
     if (e.payment_intent_digest_equals_local) {
       const pi = { ...v.request.payment_intent }; for (const k of ["payee", "asset_id"]) pi[k] = pi[k].toLowerCase();
       const d = "sha256:" + crypto.createHash("sha256").update(jcs(pi)).digest("hex");

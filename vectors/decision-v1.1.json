@@ -2,7 +2,11 @@
   "spec": "RAP Decision Interface v1.1 (draft)",
   "generated": "2026-10-09",
   "how_to_run": "Each vector gives the logical request (payment_intent and optional fields) and what the decision must satisfy. Map the request onto your decision endpoint. Expectations use 'decision_at_least' where the rule only raises a decision: review satisfies at_least review, decline satisfies at_least review and decline.",
-  "decision_order": ["allow", "review", "decline"],
+  "decision_order": [
+    "allow",
+    "review",
+    "decline"
+  ],
   "fixtures": {
     "usdc_base": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
     "clean_payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
@@ -14,67 +18,170 @@
       "id": "D1",
       "name": "Payee changed since the previous payment",
       "request": {
-        "payment_intent": { "v": "1", "payee": "0xab5801a7d398351b8be11c439e05c5b3259aec9b", "amount_atomic": "10000", "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "network": "eip155:8453", "resource_ref": "https://seller.example/api/report" },
-        "previous_payment_intent": { "v": "1", "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045", "amount_atomic": "10000", "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "network": "eip155:8453", "resource_ref": "https://seller.example/api/report" }
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xab5801a7d398351b8be11c439e05c5b3259aec9b",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453",
+          "resource_ref": "https://seller.example/api/report"
+        },
+        "previous_payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453",
+          "resource_ref": "https://seller.example/api/report"
+        }
       },
-      "expect": { "decision_at_least": "review", "reason_code": "payee_changed_since_previous", "signal_class": "authorization" },
+      "expect": {
+        "decision_at_least": "review",
+        "reason_code": "payee_changed_since_previous",
+        "signal_class": "authorization"
+      },
       "why": "A clean new address passes every list. Only the change itself shows that the quote may have been altered."
     },
     {
       "id": "D2",
       "name": "Network changed since the previous payment",
       "request": {
-        "payment_intent": { "v": "1", "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045", "amount_atomic": "10000", "asset_id": "eip155:1/erc20:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "network": "eip155:1" },
-        "previous_payment_intent": { "v": "1", "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045", "amount_atomic": "10000", "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "network": "eip155:8453" }
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:1/erc20:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "network": "eip155:1"
+        },
+        "previous_payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453"
+        }
       },
-      "expect": { "decision_at_least": "review", "reason_code": "payee_changed_since_previous" },
+      "expect": {
+        "decision_at_least": "review",
+        "reason_code": "payee_changed_since_previous"
+      },
       "why": "The same address string on another chain can be controlled by someone else."
     },
     {
       "id": "D3",
       "name": "Unchanged payee keeps the screening result",
       "request": {
-        "payment_intent": { "v": "1", "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045", "amount_atomic": "10000", "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "network": "eip155:8453" },
-        "previous_payment_intent": { "v": "1", "payee": "0xD8DA6BF26964AF9D7EED9E03E53415D37AA96045", "amount_atomic": "10000", "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "network": "eip155:8453" }
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453"
+        },
+        "previous_payment_intent": {
+          "v": "1",
+          "payee": "0xD8DA6BF26964AF9D7EED9E03E53415D37AA96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453"
+        }
       },
-      "expect": { "decision": "allow", "reason_code": "clear" },
+      "expect": {
+        "decision": "allow",
+        "reason_code": "clear"
+      },
       "why": "Address case is normalized before comparison. A continuity check that fires on spelling alone trains payers to ignore it."
     },
     {
       "id": "D4",
       "name": "Token contract set as the payee",
       "request": {
-        "payment_intent": { "v": "1", "payee": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "amount_atomic": "10000", "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "network": "eip155:8453" }
+        "payment_intent": {
+          "v": "1",
+          "payee": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453"
+        }
       },
-      "expect": { "decision": "decline", "reason_code": "payee_is_token_contract", "signal_class": "client_error", "signal_keys_contain": "payee.token_contract" },
+      "expect": {
+        "decision": "decline",
+        "reason_code": "payee_is_token_contract",
+        "signal_class": "client_error",
+        "signal_keys_contain": "payee.token_contract"
+      },
       "why": "Funds sent to a token contract are usually unrecoverable. This is a configuration error, so it is client_error, not regulatory."
     },
     {
       "id": "D5",
       "name": "Mixer contract as the payee",
       "request": {
-        "payment_intent": { "v": "1", "payee": "0x8589427373d6d84e98730d7795d8f6f8731fda16", "amount_atomic": "10000", "asset_id": "eip155:1/erc20:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48", "network": "eip155:1" }
+        "payment_intent": {
+          "v": "1",
+          "payee": "0x8589427373d6d84e98730d7795d8f6f8731fda16",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:1/erc20:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "network": "eip155:1"
+        }
       },
-      "expect": { "decision": "decline", "evidence_nonempty": true },
+      "expect": {
+        "decision": "decline",
+        "evidence_nonempty": true
+      },
       "why": "A decline must come with evidence that names its source."
     },
     {
       "id": "D6",
       "name": "Invalid intent is rejected, never repaired",
       "request": {
-        "payment_intent": { "v": "1", "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045", "amount_atomic": "10000", "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "network": "eip155:1" }
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:1"
+        }
       },
-      "expect": { "rejected": true, "error_code": "asset_network_mismatch", "no_decision": true },
+      "expect": {
+        "rejected": true,
+        "error_code": "asset_network_mismatch",
+        "no_decision": true
+      },
       "why": "Guessing which of two conflicting fields the payer meant produces a decision about a payment nobody intended."
     },
     {
       "id": "D7",
       "name": "The decision is bound to the intent",
       "request": {
-        "payment_intent": { "v": "1", "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045", "amount_atomic": "10000", "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "network": "eip155:8453" }
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453"
+        }
       },
-      "expect": { "payment_intent_digest_equals_local": true },
+      "expect": {
+        "payment_intent_digest_equals_local": true
+      },
       "why": "The payer computes the digest itself. A decision carrying a different digest was made for a different payment."
+    },
+    {
+      "id": "D8",
+      "name": "Evidence items follow the machine format",
+      "request": {
+        "payment_intent": {
+          "v": "1",
+          "payee": "0x8589427373d6d84e98730d7795d8f6f8731fda16",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:1/erc20:0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "network": "eip155:1"
+        }
+      },
+      "expect": {
+        "evidence_set_valid": true
+      },
+      "why": "Every item states type, subject_ref, source, status and anchor, so a payer's policy can weigh each observation without parsing prose."
     }
   ]
 }
