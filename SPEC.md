@@ -100,6 +100,10 @@ Most payee substitution attacks use a new, clean address. List screening cannot 
 
 **6.2 Against the seller's published listing.** When the seller's payout address is published in a directory the decision service reads (for x402, a discovery directory), and the intent carries `resource_ref`, the service compares the intent's payee with the listed payee. A mismatch MUST raise `allow` to at least `review` with `payee_differs_from_listing`. The service reports when the listing itself changed its payee recently.
 
+**6.3 Reporting the outcome.** A response that ran a continuity check carries `payee_continuity` with one of four values: `unchanged`, `changed`, `not_evaluated` (no previous intent and no listing to compare with) or `indeterminate` (the comparison could not run, for example the directory was unreachable). `not_evaluated` and `indeterminate` MUST NOT be reported as `unchanged`.
+
+**6.4 Corroborated changes.** A seller may rotate its payout address on purpose. When the current payment requirements are signed by a key the seller already used for earlier requirements, or the new payee is bound to the seller's origin by a name the seller controls, the service reports `corroborated: true` with the evidence. A corroborated change still sets `payee_continuity: changed`; whether it may stay `allow` is the payer's policy, not the service's. An uncorroborated change follows 6.1 and 6.2.
+
 Both checks only raise the decision. They never lower it.
 
 ## 7. What RAP does not do
