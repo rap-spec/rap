@@ -25,7 +25,9 @@ Status: v1, first published 2026-10-04 and cross-checked by two independent impl
 
 ### Validation, in order. Any failure rejects the intent and no digest is produced.
 
-1. The raw JSON text has no duplicate member names at any depth (`duplicate_member:<name>`).
+The order is normative. When an input fails more than one check, the first failing step determines the error code. Vector N6 depends on this: `amount_atomic` sent as a JSON number fails step 4 (`non_string_value:amount_atomic`) before step 5 ever sees it.
+
+1. The raw JSON text has no duplicate member names at any depth (`duplicate_member:<name>`). This check applies to the text, before it becomes an object. Most JSON parsers keep the last duplicate without reporting it, so validating the parsed object cannot detect this case. Use a parser that preserves member pairs, or a JSON tokenizer or pre-parser that detects duplicates before the object is built.
 2. The input is an object with no fields beyond the eleven above (`unknown_field:<name>`).
 3. All required fields are present (`missing_required:<name>`).
 4. Every present field is a JSON string (`non_string_value:<name>`) and is not empty (`empty_value:<name>`). An absent optional field stays absent. An empty one is an error.
@@ -36,6 +38,8 @@ Status: v1, first published 2026-10-04 and cross-checked by two independent impl
 ### Normalization
 
 v1 defines exactly one: on `eip155`, the hex addresses in `payee`, `payer_address` and the ERC-20 contract in `asset_id` are lowercased. Nothing else is trimmed, changed or repaired.
+
+`resource_ref` deserves a note because it is where well-meaning code breaks digests: it is opaque. Do not URL-encode or decode it, and do not apply Unicode normalization. Vectors P8 and P9 test this.
 
 ### Canonicalization and digest
 
