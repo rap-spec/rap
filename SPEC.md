@@ -1,6 +1,6 @@
 # RAP Decision Interface, draft v1.1
 
-Status: draft for review, 2026-10-09. The key words MUST, SHOULD and MAY are used as in RFC 2119.
+Status: draft for review, 2026-10-09; sections 2.1, 6.4 and 6.5 revised 2026-10-13 (proposed, see #1). The key words MUST, SHOULD and MAY are used as in RFC 2119.
 
 ## 1. Scope
 
@@ -34,6 +34,8 @@ A decision service MUST NOT return `allow` when screening could not run. It retu
 | `payee_is_token_contract` | decline | client_error | retry_after_fix |
 | `payee_changed_since_previous` | review | authorization | retry_after_authorization |
 | `payee_differs_from_listing` | review | authorization | retry_after_authorization |
+| `payee_not_bound_to_origin` | review | authorization | retry_after_fix |
+| `payee_origin_binding_unavailable` | review | uncertain | policy_dependent_backoff |
 | `mandate_intent_mismatch` | decline | authorization | retry_after_authorization |
 | `over_per_tx_limit` | decline | payment | retryable_after_funding |
 | `invalid_input` | — (400) | client_error | retry_after_fix |
@@ -94,7 +96,7 @@ Payload fields: `v`, `iss`, `decision_ref`, `payment_intent_digest`, `decision`,
 
 ## 6. Payee continuity
 
-Most payee substitution attacks use a new, clean address. List screening cannot see them. Two checks can.
+Most payee substitution attacks use a new, clean address. List screening cannot see them. The checks below can.
 
 **6.1 Against the previous payment.** The payer MAY send `previous_payment_intent`: the intent of its last payment to the same seller. The decision service compares fields. A change in `payee`, `network` or `asset_id` is high severity and MUST raise `allow` to at least `review` with `payee_changed_since_previous`. A change of host in `resource_ref`, or an amount jump beyond a stated factor, is medium severity and is reported without changing the decision.
 
@@ -102,9 +104,30 @@ Most payee substitution attacks use a new, clean address. List screening cannot 
 
 **6.3 Reporting the outcome.** A response that ran a continuity check carries `payee_continuity` with one of four values: `unchanged`, `changed`, `not_evaluated` (no previous intent and no listing to compare with) or `indeterminate` (the comparison could not run, for example the directory was unreachable). `not_evaluated` and `indeterminate` MUST NOT be reported as `unchanged`.
 
-**6.4 Corroborated changes.** A seller may rotate its payout address on purpose. When the current payment requirements are signed by a key the seller already used for earlier requirements, or the new payee is bound to the seller's origin by a name the seller controls, the service reports `corroborated: true` with the evidence. A corroborated change still sets `payee_continuity: changed`; whether it may stay `allow` is the payer's policy, not the service's. An uncorroborated change follows 6.1 and 6.2.
+**6.4 Corroborated changes.** A seller may rotate its payout address on purpose. When the current payment requirements are signed by a key the seller already used for earlier requirements, or the new payee is bound to the seller's origin as described in 6.5 (result `bound`), the service reports `corroborated: true` with the evidence. A corroborated change still sets `payee_continuity: changed`; whether it may stay `allow` is the payer's policy, not the service's. An uncorroborated change follows 6.1 and 6.2.
 
-Both checks only raise the decision. They never lower it.
+**6.5 Against the origin that served the terms.** 6.1 and 6.2 compare the payee with payment history and with a directory. Neither shows that the payee is bound to the origin the payer is talking to. A syntactically valid set of payment requirements can still name a payee unrelated to the origin that served them.
+
+When `resource_ref` is an absolute HTTP or HTTPS URL supplied by the payer to identify the resource it actually requested, the service MAY evaluate whether the payee is bound to that request origin, the origin of the URL as defined by RFC 6454 (scheme, host and port, with the default port when none is given). Parsing the URL for this check does not change `resource_ref`: the Payment Intent digest still binds the original string exactly (Payment Intent v1 keeps `resource_ref` opaque). When `resource_ref` is absent, or is not an absolute HTTP or HTTPS URL (for example a `urn:` identifier), there is no request origin and this check does not apply.
+
+A binding is established, for example, when the exact payment requirements naming the payee verify under a key anchored at that origin, or when an authenticated binding published under the origin's control names that payee. The evidence records the binding method and its source. RAP does not yet define one mandatory binding mechanism, which is why this check is MAY.
+
+The service reports `payee_origin_binding` with one of four values:
+
+- `bound`: a binding method completed and the payee is bound to the origin.
+- `unbound`: an applicable binding method completed and the payee is not bound to the origin.
+- `not_evaluated`: no request origin, or no supported binding method applies.
+- `indeterminate`: an applicable method was attempted and could not complete, for example the origin was unreachable.
+
+`not_evaluated` and `indeterminate` MUST NOT be reported as `bound`. An `unbound` result MUST prevent `allow`: an otherwise-`allow` decision is raised to at least `review` with `reason_code: "payee_not_bound_to_origin"` and the signal key `payee.origin_binding`. An `indeterminate` result MUST NOT leave an otherwise-`allow` decision at `allow`: the service raises it to at least `review` with `reason_code: "payee_origin_binding_unavailable"` and the same signal key, because a check that applied and did not finish has not passed. `bound` and `not_evaluated` do not change the decision on account of this check: a binding that holds adds no risk, and when no binding check applied there is nothing to act on. Other checks may still change the decision.
+
+A `bound` result establishes only that the origin and the payee are consistent. It does not establish the seller's identity, legitimacy or safety.
+
+Vectors D9 to D12 in `vectors/decision-v1.1.json` (`origin_binding_vectors`) cover the four outcomes. They are optional-feature vectors: an implementation that does not implement this section is not required to run them and keeps its base conformance; an implementation that implements or claims this section MUST pass them. They supply the binding outcome as an input, so the result does not depend on a live origin.
+
+Raised in [#1](https://github.com/rap-spec/rap/issues/1) from a mis-attributed payment on a live x402 service.
+
+These checks only raise the decision. They never lower it.
 
 ## 7. What RAP does not do
 
