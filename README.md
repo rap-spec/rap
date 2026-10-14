@@ -32,7 +32,7 @@ An implementation is listed here when it publishes its own conformance run again
 | Implementation | Scope | Conformance run |
 |---|---|---|
 | OceanAlt (reference) | Decision object, evidence, intent binding, receipt, payee continuity | `vectors/` run published by the implementer |
-| A second, independent implementation (listed by name once it agrees) | Payment Intent v1 digests | 22/22 on `payment-intent-v1.json`, reported by the implementer on 2026-10-04 |
+| [AgentKey](https://agentkey.us) | Payment Intent v1 digests | 22/22 on the Payment Intent v1 vectors, 2026-10-04, reproduced 2026-10-14 ([run record](https://agentkey-rap-run-record.ben15171.chatgpt.site)). The run file carries the same 12 positive and 10 negative cases as `vectors/payment-intent-v1.json`; only its `spec` label differs. |
 
 ## Status
 
