@@ -1,0 +1,9 @@
+probe402 payTo fixture set: terms of use
+
+What these files are. The readings (sellers.csv) and their field list are observations by probe402 of public payment routes, each at a dated instant: every row is what one route's payment request named when probe402 read it. They describe routes and readings. They are not a statement about any person or organisation.
+
+Use. You may use, copy, adapt and redistribute these files, in whole or in part, including in a public working-group repository.
+
+Attribution. Credit probe402 (https://probe402.com), and cite a row by its capture_sha256, the hash of the captured answer behind it. The published day manifest at https://probe402.com/chain/<sealed_in> lists that hash.
+
+No warranty. The files are provided as they are, without warranty of any kind.
