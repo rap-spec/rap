@@ -6,13 +6,13 @@ The readings describe routes, not people or organisations. Nothing here says tha
 
 ## What is in it
 
-`sellers.csv` holds 360 readings of 9 routes, three for each pattern probe402 classed across 11,493 routes in the period:
+`sellers.csv` holds 360 readings of 9 routes, three for each pattern probe402 defines:
 
 | Pattern | Routes in the full probe402 set | What a reading sequence looks like here |
 |---|---|---|
-| `stable` | 523 | one payee throughout, not quoted by any other route |
-| `rotating` | 33 | a new payee on every reading |
-| `shared` | 10,567 | one payee throughout, quoted by three or more routes (one address in the period was quoted by 636 routes) |
+| `stable` | one payee throughout, not quoted by any other route |
+| `rotating` | a new payee on every reading |
+| `shared` | one payee throughout, quoted by three or more routes |
 
 Field definitions are in `FIELDS.md`.
 
