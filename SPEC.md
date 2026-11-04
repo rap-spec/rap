@@ -104,6 +104,8 @@ Most payee substitution attacks use a new, clean address. List screening cannot 
 
 **6.4 Corroborated changes.** A seller may rotate its payout address on purpose. When the current payment requirements are signed by a key the seller already used for earlier requirements, or the new payee is bound to the seller's origin by a name the seller controls, the service reports `corroborated: true` with the evidence. A corroborated change still sets `payee_continuity: changed`; whether it may stay `allow` is the payer's policy, not the service's. An uncorroborated change follows 6.1 and 6.2.
 
+Vectors D13 to D15 in `vectors/decision-v1.1.json` (`continuity_outcome_vectors`) cover the outcomes in 6.3 and 6.4.
+
 Both checks only raise the decision. They never lower it.
 
 ## 7. What RAP does not do

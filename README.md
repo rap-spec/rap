@@ -20,7 +20,7 @@ RAP works with x402, MPP, AP2, ACP and card-network agent programs. It does not 
 | [SPEC.md](SPEC.md) | The specification, draft v1.1 |
 | [payment-intent/payment-intent-v1.md](payment-intent/payment-intent-v1.md) | Payment Intent v1 and the digest rules |
 | [vectors/payment-intent-v1.json](vectors/payment-intent-v1.json) | 22 vectors for intent validation and digests |
-| [vectors/decision-v1.1.json](vectors/decision-v1.1.json) | Decision vectors: payee continuity, token-contract payee, sanctions, malformed input |
+| [vectors/decision-v1.1.json](vectors/decision-v1.1.json) | Decision vectors: payee continuity, token-contract payee, sanctions, malformed input (D1 to D8, run against an endpoint), plus continuity outcomes (D13 to D15, run against your continuity logic) |
 | [GOVERNANCE.md](GOVERNANCE.md) | How changes are made and who decides |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to propose a change |
 | [LICENSE.md](LICENSE.md) | CC BY 4.0 for the text, Apache 2.0 for code and vectors |
