@@ -20,7 +20,7 @@ RAP works with x402, MPP, AP2, ACP and card-network agent programs. It does not 
 | [SPEC.md](SPEC.md) | The specification, draft v1.1 |
 | [payment-intent/payment-intent-v1.md](payment-intent/payment-intent-v1.md) | Payment Intent v1 and the digest rules |
 | [vectors/payment-intent-v1.json](vectors/payment-intent-v1.json) | 24 vectors: 22 for intent validation and digests, 2 for the evidence-set digest |
-| [vectors/decision-v1.1.json](vectors/decision-v1.1.json) | Decision vectors: payee continuity, token-contract payee, sanctions, malformed input (D1 to D8, run against an endpoint), plus optional origin-binding vectors (D9 to D12, required only if you implement SPEC.md 6.5; run against your decision logic) |
+| [vectors/decision-v1.1.json](vectors/decision-v1.1.json) | Decision vectors: payee continuity, token-contract payee, sanctions, malformed input (D1 to D8, run against an endpoint), optional origin-binding vectors (D9 to D12, required only if you implement SPEC.md 6.5; run against your decision logic), and continuity outcomes (D13 to D15, run against your continuity logic) |
 | [GOVERNANCE.md](GOVERNANCE.md) | How changes are made and who decides |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to propose a change |
 | [LICENSE.md](LICENSE.md) | CC BY 4.0 for the text, Apache 2.0 for code and vectors |
@@ -32,7 +32,7 @@ An implementation is listed here when it publishes its own conformance run again
 | Implementation | Scope | Conformance run |
 |---|---|---|
 | OceanAlt (reference) | Decision object, evidence, intent binding, receipt, payee continuity | `vectors/` run published by the implementer |
-| A second, independent implementation (listed by name once it agrees) | Payment Intent v1 digests | 22/22 on `payment-intent-v1.json`, reported by the implementer on 2026-10-04 |
+| [AgentKey](https://agentkey.us) | Payment Intent v1 digests | 22/22 on the Payment Intent v1 vectors, 2026-10-04, reproduced 2026-10-14 ([run record](https://agentkey-rap-run-record.ben15171.chatgpt.site)). The run file carries the same 12 positive and 10 negative cases as `vectors/payment-intent-v1.json`; only its `spec` label differs. |
 | Independent Python implementation by [@baianomarceloeduardo-jpg](https://github.com/baianomarceloeduardo-jpg), written from the spec text only | Payment Intent v1 validation and digests, evidence-set digest | 24/24 on `payment-intent-v1.json` (22 intent cases, 2 evidence cases), [runner](https://gist.github.com/baianomarceloeduardo-jpg/012074a61efeed024e90b6f00efce59f), 2026-10-10 ([#1](https://github.com/rap-spec/rap/issues/1)) |
 
 ## Status

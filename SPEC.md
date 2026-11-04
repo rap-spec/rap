@@ -106,6 +106,8 @@ Most payee substitution attacks use a new, clean address. List screening cannot 
 
 **6.4 Corroborated changes.** A seller may rotate its payout address on purpose. When the current payment requirements are signed by a key the seller already used for earlier requirements, or the new payee is bound to the seller's origin as described in 6.5 (result `bound`), the service reports `corroborated: true` with the evidence. A corroborated change still sets `payee_continuity: changed`; whether it may stay `allow` is the payer's policy, not the service's. An uncorroborated change follows 6.1 and 6.2.
 
+Vectors D13 to D15 in `vectors/decision-v1.1.json` (`continuity_outcome_vectors`) cover the outcomes in 6.3 and 6.4.
+
 **6.5 Against the origin that served the terms.** 6.1 and 6.2 compare the payee with payment history and with a directory. Neither shows that the payee is bound to the origin the payer is talking to. A syntactically valid set of payment requirements can still name a payee unrelated to the origin that served them.
 
 When `resource_ref` is an absolute HTTP or HTTPS URL supplied by the payer to identify the resource it actually requested, the service MAY evaluate whether the payee is bound to that request origin, the origin of the URL as defined by RFC 6454 (scheme, host and port, with the default port when none is given). Parsing the URL for this check does not change `resource_ref`: the Payment Intent digest still binds the original string exactly (Payment Intent v1 keeps `resource_ref` opaque). When `resource_ref` is absent, or is not an absolute HTTP or HTTPS URL (for example a `urn:` identifier), there is no request origin and this check does not apply.

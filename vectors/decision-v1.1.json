@@ -284,5 +284,81 @@
         "why": "The check applied and did not finish, so it has not passed. An otherwise-allow decision is raised to at least review."
       }
     ]
+  },
+  "continuity_outcome_vectors": {
+    "how_to_run": "SPEC.md 6.3 and 6.4. Apply when your service runs a continuity check. These outcomes depend on what history and directory data the service holds at check time, so each vector states that comparison state as an input instead of relying on a live directory. Feed the comparison state into the step of your implementation that reports payee_continuity, and compare the reported fields. The vectors lock only what 6.3 and 6.4 say about reporting; they assert nothing about the decision, which these sections do not define for these outcomes.",
+    "vectors": [
+      {
+        "id": "D13",
+        "name": "Nothing to compare with",
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453",
+          "resource_ref": "https://seller.example/api/report"
+        },
+        "comparison_state": {
+          "previous_payment_intent": null,
+          "listing": "none"
+        },
+        "expect": {
+          "payee_continuity": "not_evaluated",
+          "payee_continuity_not": "unchanged"
+        },
+        "why": "No previous intent and no listing: the check has nothing to compare, so it reports not_evaluated, never unchanged."
+      },
+      {
+        "id": "D14",
+        "name": "Comparison could not run",
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453",
+          "resource_ref": "https://seller.example/api/report"
+        },
+        "comparison_state": {
+          "previous_payment_intent": null,
+          "listing": "unreachable"
+        },
+        "expect": {
+          "payee_continuity": "indeterminate",
+          "payee_continuity_not": "unchanged"
+        },
+        "why": "The directory could not be read, so the comparison did not complete. It is reported as indeterminate, never unchanged."
+      },
+      {
+        "id": "D15",
+        "name": "Corroborated payee rotation",
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xab5801a7d398351b8be11c439e05c5b3259aec9b",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453",
+          "resource_ref": "https://seller.example/api/report"
+        },
+        "previous_payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453",
+          "resource_ref": "https://seller.example/api/report"
+        },
+        "comparison_state": {
+          "listing": "none",
+          "corroboration": "current requirements signed by a key the seller used for earlier requirements"
+        },
+        "expect": {
+          "payee_continuity": "changed",
+          "corroborated": true
+        },
+        "why": "A corroborated rotation is still a change: the service reports changed with corroborated true and the evidence. Whether the payment may stay allow is the payer policy (6.4), so the vector asserts no decision."
+      }
+    ]
   }
 }
