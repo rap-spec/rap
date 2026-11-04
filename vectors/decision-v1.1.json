@@ -185,7 +185,7 @@
     }
   ],
   "origin_binding_vectors": {
-    "how_to_run": "Optional feature: SPEC.md 6.5 (MAY). An implementation that does not implement 6.5 keeps its base RAP conformance without these vectors; an implementation that implements or claims 6.5 MUST pass D9 to D12. To keep the vectors deterministic and isolate the decision-combination semantics, each one supplies the binding outcome as an input rather than depending on a live origin: it gives the decision the service reached before the origin-binding check and the outcome of that check. Feed both into the step of your implementation that combines them, and compare. A raise is a floor: review satisfies at_least review, and so does decline.",
+    "how_to_run": "Optional feature: SPEC.md 6.5 (MAY). An implementation that does not implement 6.5 keeps its base RAP conformance without these vectors; an implementation that implements or claims 6.5 MUST pass D9 to D12 and D16 to D18. To keep the vectors deterministic and isolate the decision-combination semantics, each one supplies the binding outcome as an input rather than depending on a live origin: it gives the decision the service reached before the origin-binding check and the outcome of that check. Feed both into the step of your implementation that combines them, and compare. A raise is a floor: review satisfies at_least review, and so does decline. D16 to D18 test 6.5 Completeness: instead of the outcome, each gives what the binding source stated (binding_source). Derive the outcome from it as 6.5 describes, then combine as for D9 to D12.",
     "vectors": [
       {
         "id": "D9",
@@ -282,6 +282,99 @@
           "retry": "policy_dependent_backoff"
         },
         "why": "The check applied and did not finish, so it has not passed. An otherwise-allow decision is raised to at least review."
+      },
+      {
+        "id": "D16",
+        "name": "Binding source makes no statement about this origin",
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453",
+          "resource_ref": "https://seller.example/api/report"
+        },
+        "before_origin_binding": {
+          "decision": "allow",
+          "reason_code": "clear"
+        },
+        "binding_source": {
+          "method": "example-name-records",
+          "lists_origin": false,
+          "source_reason": "origin-not-listed"
+        },
+        "expect": {
+          "payee_origin_binding": "indeterminate",
+          "payee_origin_binding_not": "unbound",
+          "decision_at_least": "review",
+          "reason_code": "payee_origin_binding_unavailable",
+          "signal_keys_contain": "payee.origin_binding",
+          "evidence_keeps_source_reason": "origin-not-listed"
+        },
+        "why": "The source never authorized anything for this origin, so it can neither bind nor exclude. That is indeterminate, never unbound and never bound, and an otherwise-allow decision is raised to at least review."
+      },
+      {
+        "id": "D17",
+        "name": "Origin listed, payee absent from a complete list for this network",
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453",
+          "resource_ref": "https://seller.example/api/report"
+        },
+        "before_origin_binding": {
+          "decision": "allow",
+          "reason_code": "clear"
+        },
+        "binding_source": {
+          "method": "example-name-records",
+          "lists_origin": true,
+          "payees_for_network": [
+            "0xab5801a7d398351b8be11c439e05c5b3259aec9b"
+          ],
+          "source_reason": "payto-not-listed"
+        },
+        "expect": {
+          "payee_origin_binding": "unbound",
+          "decision_at_least": "review",
+          "reason_code": "payee_not_bound_to_origin",
+          "signal_keys_contain": "payee.origin_binding",
+          "evidence_keeps_source_reason": "payto-not-listed"
+        },
+        "why": "The source lists payees for this origin and network, and the intended payee is not among them. That is a complete statement, so the result is unbound."
+      },
+      {
+        "id": "D18",
+        "name": "Origin listed, no payees listed for this network",
+        "payment_intent": {
+          "v": "1",
+          "payee": "0xd8da6bf26964af9d7eed9e03e53415d37aa96045",
+          "amount_atomic": "10000",
+          "asset_id": "eip155:8453/erc20:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "network": "eip155:8453",
+          "resource_ref": "https://seller.example/api/report"
+        },
+        "before_origin_binding": {
+          "decision": "allow",
+          "reason_code": "clear"
+        },
+        "binding_source": {
+          "method": "example-name-records",
+          "lists_origin": true,
+          "payees_for_network": [],
+          "source_reason": "payto-not-listed"
+        },
+        "expect": {
+          "payee_origin_binding": "indeterminate",
+          "payee_origin_binding_not": "unbound",
+          "decision_at_least": "review",
+          "reason_code": "payee_origin_binding_unavailable",
+          "signal_keys_contain": "payee.origin_binding",
+          "evidence_keeps_source_reason": "payto-not-listed"
+        },
+        "why": "The source names the origin but says nothing about this network, so it makes no complete statement for it. The result is indeterminate, not unbound."
       }
     ]
   },
