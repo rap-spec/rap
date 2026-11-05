@@ -125,6 +125,14 @@ The service reports `payee_origin_binding` with one of four values:
 
 A `bound` result establishes only that the origin and the payee are consistent. It does not establish the seller's identity, legitimacy or safety.
 
+**Completeness.** `unbound` needs a binding source that states the complete set of payees it authorizes for this exact origin and network. A source that makes no statement about this origin, or lists payees for the origin but none for this network, neither binds nor excludes the payee, so the result is `indeterminate`, not `unbound`. A payer reading `indeterminate` there learns that no usable binding exists, which is not a negative finding about the seller.
+
+When the payment requirements offer more than one network or payee, the service evaluates each offered entry separately and records each result with the index of that entry. The entry the payer intends to pay, as named in the Payment Intent, is the one that counts for the decision.
+
+The evidence keeps the binding method's own reason next to the RAP outcome (for example `origin-not-listed`, `resolution-failed` or `payto-not-listed`), so a verifier can log why and a payer can decide whether a retry could change anything. It also records `checked_at`. A stored result describes the binding at `checked_at` only.
+
+Vectors D16 to D18 cover completeness. These points were settled in [x402-foundation/wg-identity#42](https://github.com/x402-foundation/wg-identity/issues/42).
+
 Vectors D9 to D12 in `vectors/decision-v1.1.json` (`origin_binding_vectors`) cover the four outcomes. They are optional-feature vectors: an implementation that does not implement this section is not required to run them and keeps its base conformance; an implementation that implements or claims this section MUST pass them. They supply the binding outcome as an input, so the result does not depend on a live origin.
 
 Raised in [#1](https://github.com/rap-spec/rap/issues/1) from a mis-attributed payment on a live x402 service.
