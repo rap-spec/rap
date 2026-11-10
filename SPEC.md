@@ -119,11 +119,19 @@ The service reports `payee_origin_binding` with one of four values:
 - `bound`: a binding method completed and the payee is bound to the origin.
 - `unbound`: an applicable binding method completed and the payee is not bound to the origin.
 - `not_evaluated`: no request origin, or no supported binding method applies.
-- `indeterminate`: an applicable method was attempted and could not complete, for example the origin was unreachable.
+- `indeterminate`: an applicable method was attempted and could not complete, for example the origin was unreachable, or it completed without a statement about this origin or network (see Completeness).
 
 `not_evaluated` and `indeterminate` MUST NOT be reported as `bound`. An `unbound` result MUST prevent `allow`: an otherwise-`allow` decision is raised to at least `review` with `reason_code: "payee_not_bound_to_origin"` and the signal key `payee.origin_binding`. An `indeterminate` result MUST NOT leave an otherwise-`allow` decision at `allow`: the service raises it to at least `review` with `reason_code: "payee_origin_binding_unavailable"` and the same signal key, because a check that applied and did not finish has not passed. `bound` and `not_evaluated` do not change the decision on account of this check: a binding that holds adds no risk, and when no binding check applied there is nothing to act on. Other checks may still change the decision.
 
 A `bound` result establishes only that the origin and the payee are consistent. It does not establish the seller's identity, legitimacy or safety.
+
+**Completeness.** `unbound` needs a binding source that states the complete set of payees it authorizes for this exact origin and network. A source that makes no statement about this origin, or lists payees for the origin but none for this network, neither binds nor excludes the payee, so the result is `indeterminate`, not `unbound`. A payer reading `indeterminate` there learns that no usable binding exists, which is not a negative finding about the seller.
+
+When the payment requirements offer more than one network or payee, the service evaluates each offered entry separately and records each result with the index of that entry. The entry the payer intends to pay, as named in the Payment Intent, is the one that counts for the decision.
+
+The evidence keeps the binding method's own reason, and any detail the method uses to qualify it, next to the RAP outcome (for example `origin-not-listed`, `resolution-failed`, or `payto-not-listed` with the method's `detail.field`), so a verifier can log why and a payer can decide whether a retry could change anything. A method may give two different outcomes the same reason and separate them only by that detail; an implementation that maps on the reason alone can turn `indeterminate` into `unbound`. It also records `checked_at`. A stored result describes the binding at `checked_at` only.
+
+Vectors D16 to D18 cover completeness. These points were settled in [x402-foundation/wg-identity#42](https://github.com/x402-foundation/wg-identity/issues/42).
 
 Vectors D9 to D12 in `vectors/decision-v1.1.json` (`origin_binding_vectors`) cover the four outcomes. They are optional-feature vectors: an implementation that does not implement this section is not required to run them and keeps its base conformance; an implementation that implements or claims this section MUST pass them. They supply the binding outcome as an input, so the result does not depend on a live origin.
 
